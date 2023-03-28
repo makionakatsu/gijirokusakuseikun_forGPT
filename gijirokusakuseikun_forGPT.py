@@ -1,3 +1,7 @@
+import os
+os.environ['PATH'] += ':/usr/bin'
+
+
 import openai
 import streamlit as st
 import io
@@ -5,7 +9,6 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 from pydub.effects import normalize, strip_silence
 import numpy as np
-import os
 import math
 from tempfile import NamedTemporaryFile
 
