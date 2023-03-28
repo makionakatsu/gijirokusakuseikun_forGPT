@@ -1,7 +1,4 @@
 import os
-os.environ['PATH'] += ':/usr/bin'
-
-
 import openai
 import streamlit as st
 import io
