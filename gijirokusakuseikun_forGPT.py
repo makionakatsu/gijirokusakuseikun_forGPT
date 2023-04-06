@@ -87,8 +87,13 @@ def transcribe_audio(uploaded_file_obj):
     return transcription
 
 
-
 def summarize_text(transcription, custom_prompt, max_tokens=4096):
+    # デバッグ用コード
+    if openai.api_key is None:
+        st.error("API key is not set in the summarize_text function.")
+    else:
+        st.write("API key is set in the summarize_text function.")
+
     if not custom_prompt:
         custom_prompt = f"以下の文章を200字程度で要約してください。出力用フォーマットは、「要約」「ポジティブな意見」「ネガティブな意見」「ネクストアクション」とし、要約以外は箇条書きで記載してください。"
 
