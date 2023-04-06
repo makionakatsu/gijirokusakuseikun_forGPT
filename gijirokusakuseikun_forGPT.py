@@ -146,15 +146,10 @@ if st.button("Summarize"):
         transcription = transcribe_audio(uploaded_file_obj)
         st.write("Transcription:")
         st.write(transcription)
-
-        st.write("API key before summarizing text:")
-
         st.write("Summarizing text...")
         summary = summarize_text(transcription, custom_prompt)
         st.write("Summary:")
         st.write(summary)
-
-        st.write("API key after summarizing text:")
 
     else:
         st.error("Please upload an audio file and enter your OpenAI API key.")
