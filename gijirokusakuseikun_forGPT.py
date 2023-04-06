@@ -95,7 +95,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=4096):
         st.write("API key is set in the summarize_text function.")
 
     if not custom_prompt:
-        custom_prompt = f"以下の文章を200字程度で要約してください。出力用フォーマットは、「要約」「ポジティブな意見」「ネガティブな意見」「ネクストアクション」とし、要約以外は箇条書きで記載してください。"
+        custom_prompt = f"以下の文章を200字程度で要約してください。出力用フォーマットは、「要約」「決定事項」「ポジティブな意見」「ネガティブな意見」「ネクストアクション」とし、要約以外は箇条書きで記載してください。"
 
     # 1. 与えられたトランスクリプションを、GPT-3.5-turbo モデルが処理できるサイズのチャンクに分割
     text_chunks = []
@@ -148,7 +148,6 @@ if st.button("Summarize"):
         st.write(transcription)
 
         st.write("API key before summarizing text:")
-        st.write(openai.api_key)
 
         st.write("Summarizing text...")
         summary = summarize_text(transcription, custom_prompt)
@@ -156,7 +155,6 @@ if st.button("Summarize"):
         st.write(summary)
 
         st.write("API key after summarizing text:")
-        st.write(openai.api_key)
 
     else:
         st.error("Please upload an audio file and enter your OpenAI API key.")
