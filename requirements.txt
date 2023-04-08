@@ -2,4 +2,8 @@ openai==0.27.0
 streamlit==1.20.0
 pydub==0.25.1
 numpy==1.24.2
+<<<<<<< HEAD
 ffmpeg==1.4
+=======
+ffmpeg==1.4
+>>>>>>> 70e63310b58b75b739f38576a7edca77a8bb5f1b
