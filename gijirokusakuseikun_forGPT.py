@@ -4,11 +4,6 @@ import streamlit as st
 import io
 from pydub import AudioSegment
 from pydub.utils import make_chunks
-<<<<<<< HEAD
-=======
-from pydub.effects import normalize, strip_silence
-import numpy as np
->>>>>>> 70e63310b58b75b739f38576a7edca77a8bb5f1b
 import math
 from tempfile import NamedTemporaryFile
 
@@ -90,11 +85,8 @@ def transcribe_audio(uploaded_file_obj):
     return transcription
 
 
-<<<<<<< HEAD
 def summarize_text(transcription, custom_prompt, max_tokens=4000):
-=======
-def summarize_text(transcription, custom_prompt, max_tokens=4096):
->>>>>>> 70e63310b58b75b739f38576a7edca77a8bb5f1b
+
     # デバッグ用コード
     if openai.api_key is None:
         st.error("API key is not set in the summarize_text function.")
@@ -102,11 +94,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=4096):
         st.write("API key is set in the summarize_text function.")
 
     if not custom_prompt:
-<<<<<<< HEAD
         custom_prompt = f"以下の文章を短い文章で要約してください。出力用フォーマットは、「要約」「決定事項」「ポジティブな意見」「ネガティブな意見」「ネクストアクション」とし、要約以外は箇条書きで記載してください。"
-=======
-        custom_prompt = f"以下の文章を200字程度で要約してください。出力用フォーマットは、「要約」「決定事項」「ポジティブな意見」「ネガティブな意見」「ネクストアクション」とし、要約以外は箇条書きで記載してください。"
->>>>>>> 70e63310b58b75b739f38576a7edca77a8bb5f1b
 
     # 1. 与えられたトランスクリプションを、GPT-3.5-turbo モデルが処理できるサイズのチャンクに分割
     text_chunks = []
@@ -164,7 +152,3 @@ if st.button("Summarize"):
 
     else:
         st.error("Please upload an audio file and enter your OpenAI API key.")
-<<<<<<< HEAD
-=======
-
->>>>>>> 70e63310b58b75b739f38576a7edca77a8bb5f1b
