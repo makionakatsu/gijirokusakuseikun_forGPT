@@ -94,7 +94,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=4000):
 
     if not custom_prompt:
         custom_prompt = f"""
-        以下のテキストについて、注意事項に則って短い文章で要約して出力してください。
+        以下のテキストについて、注意事項に則って短い文章でMarkdown方式で要約して出力してください。
         #️# 注意事項 ##
         ・議題ごとのまとまりで要約する
         ・ダブりや不足のないようにする
