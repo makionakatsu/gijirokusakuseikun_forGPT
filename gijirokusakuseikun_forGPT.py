@@ -84,7 +84,7 @@ def transcribe_audio(uploaded_file_obj):
     return transcription
 
 
-def summarize_text(transcription, custom_prompt, max_tokens=4000):
+def summarize_text(transcription, custom_prompt, max_tokens=31000):
 
     # デバッグ用コード
     if openai.api_key is None:
