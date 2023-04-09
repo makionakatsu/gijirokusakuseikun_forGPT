@@ -133,7 +133,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=31000):
         """
 
         response = openai.ChatCompletion.create(
-            model="gpt-4-32k",
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": """
                  あなたは優秀な文筆家です。
@@ -154,7 +154,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=31000):
     final_prompt = f"{custom_prompt}: {summarized_text}"
 
     response = openai.ChatCompletion.create(
-        model="gpt-4-32k",
+        model="gpt-4",
         messages=[
             {"role": "system", "content": """
              あなたは優秀な文筆家です。
