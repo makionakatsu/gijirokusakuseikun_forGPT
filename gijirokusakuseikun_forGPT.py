@@ -65,7 +65,6 @@ def transcribe_audio(uploaded_file_obj):
                 chunk.export(temp_file.name, format="mp3")
             temp_file.flush()
 
-            # Noise reduction
             # ノイズゲート処理を適用
             silence_threshold = -50.0  # 無音とみなすしきい値を設定（適宜調整してください）
             padding_duration = 100  # パディングの期間（ミリ秒）
@@ -94,7 +93,25 @@ def summarize_text(transcription, custom_prompt, max_tokens=4000):
         st.write("API key is set in the summarize_text function.")
 
     if not custom_prompt:
-        custom_prompt = f"以下の文章を短い文章で要約してください。出力用フォーマットは、「要約」「決定事項」「ポジティブな意見」「ネガティブな意見」「ネクストアクション」とし、要約以外は箇条書きで記載してください。"
+        custom_prompt = f"""
+        以下のテキストについて、注意事項に則って短い文章で要約して出力してください。
+        #️# 注意事項 ##
+        ・議題ごとのまとまりで要約する
+        ・ダブりや不足のないようにする
+        ・重要箇所は重要であることを明示する
+        ・5W1Hの内容が含まれる場合は必ず出力に反映する
+        ## 出力フォーマット ##
+        ・要約は、200字以内とする。
+        ・箇条書きとする。
+        ・フォーマットは以下とする。
+        ###議題
+        ###要約
+        ###決定事項(結論)
+        ###主な意見
+        ####ポジティブな意見
+        ####ネガティブな意見
+        ###NextAction
+        """
 
     # 1. 与えられたトランスクリプションを、GPT-3.5-turbo モデルが処理できるサイズのチャンクに分割
     text_chunks = []
@@ -109,12 +126,21 @@ def summarize_text(transcription, custom_prompt, max_tokens=4000):
     # 2. 分割された各チャンクに対して、MECEに基づく要約を行う
     summarized_chunks = []
     for chunk in text_chunks:
-        chunk_prompt = f"このテキストをできるだけ重要な箇所を漏らさないように短くしてください: {chunk}"
+        chunk_prompt = f"""
+        以下のテキストをできるだけ重要な箇所を漏らさないように、短い文章にしてください。
+        5W1Hの情報は必ず残してください。
+        : {chunk}
+        """
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "あなたは優秀なアシスタントです。MECEの思考法での要約が得意です"},
+                {"role": "system", "content": """
+                 あなたは優秀な文筆家です。
+                 MECEや5W1Hの思考法を用いることが得意です。
+                 仕事の要約に使える文章を出力します。
+                 """
+                },
                 {"role": "user", "content": chunk_prompt},
             ],
         )
@@ -130,7 +156,12 @@ def summarize_text(transcription, custom_prompt, max_tokens=4000):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "あなたは優秀なアシスタントです。MECEの思考法での要約が得意です"},
+            {"role": "system", "content": """
+             あなたは優秀な文筆家です。
+             MECEや5W1Hの思考法を用いることが得意です。
+             仕事の要約に使える文章を出力します。
+             """
+            },
             {"role": "user", "content": final_prompt},
         ],
     )
@@ -146,7 +177,7 @@ if st.button("Summarize"):
         st.write("Transcription:")
         st.text_area("", transcription, height=200)
         st.download_button(
-            label="Download Transcription as .txt",
+            label="Download Transcription.txt",
             data=transcription.encode("utf-8"),
             file_name="transcription.txt",
             mime="text/plain",
