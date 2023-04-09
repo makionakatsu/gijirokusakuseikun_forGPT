@@ -7,7 +7,7 @@ from pydub.utils import make_chunks
 import math
 from tempfile import NamedTemporaryFile
 
-st.title("議事録作成くん ver0.5")
+st.title("議事録作成くん ver0.6")
 
 openai_api_key = st.text_input("Enter OpenAI API Key:")
 openai.api_key = openai_api_key
@@ -18,7 +18,7 @@ if uploaded_file_obj:
 else:
     file_ext = None
 
-custom_prompt = st.text_input("Enter custom prompt (leave empty to use default):")
+custom_prompt = st.text_area("Enter custom prompt (leave empty to use default):", height=100)
 transcription = None
 
 
@@ -144,11 +144,22 @@ if st.button("Summarize"):
         st.write("Transcribing audio...")
         transcription = transcribe_audio(uploaded_file_obj)
         st.write("Transcription:")
-        st.write(transcription)
+        st.text_area("", transcription, height=200)
+        st.download_button(
+            label="Download Transcription as .txt",
+            data=transcription.encode("utf-8"),
+            file_name="transcription.txt",
+            mime="text/plain",
+        )
         st.write("Summarizing text...")
         summary = summarize_text(transcription, custom_prompt)
         st.write("Summary:")
         st.write(summary)
-
+        st.download_button(
+            label="Download Summary .txt",
+            data=summary.encode("utf-8"),
+            file_name="summary.txt",
+            mime="text/plain",
+        )
     else:
         st.error("Please upload an audio file and enter your OpenAI API key.")
