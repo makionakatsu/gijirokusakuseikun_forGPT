@@ -7,10 +7,13 @@ from pydub.utils import make_chunks
 import math
 from tempfile import NamedTemporaryFile
 
-st.title("議事録作成くん ver0.6")
+st.title("議事録作成くん ver0.7")
 
 openai_api_key = st.text_input("Enter OpenAI API Key:")
 openai.api_key = openai_api_key
+
+language_options = {"Japanese":"ja", "English":"en", "Chinese": "zh"}
+selected_language = st.selectbox("Choose a language:", options=list(language_options.keys()))
 
 uploaded_file_obj = st.file_uploader("Choose an audio file", type=["m4a", "mp3", "webm", "mp4", "mpga", "wav", "mpeg"], key="audio_file")
 if uploaded_file_obj:
@@ -22,7 +25,7 @@ custom_prompt = st.text_area("Enter custom prompt (leave empty to use default):"
 transcription = None
 
 
-def transcribe_audio(uploaded_file_obj):
+def transcribe_audio(uploaded_file_obj, language):
     if uploaded_file_obj is None:
         raise ValueError("No file has been uploaded.")
 
@@ -74,8 +77,8 @@ def transcribe_audio(uploaded_file_obj):
                 noise_reduced_chunk.export(file_obj, format="mp3")
                 file_obj.flush()
 
-                with open(file_obj.name, "rb") as file_obj:
-                    transcript = openai.Audio.transcribe(model="whisper-1", language='ja', file=file_obj)
+                with open(temp_file.name, "rb") as file_obj:
+                    transcript = openai.Audio.transcribe(model="whisper-1", language = language, file=file_obj)
 
             os.unlink(temp_file.name)
             transcriptions.append(transcript.text)
@@ -84,7 +87,7 @@ def transcribe_audio(uploaded_file_obj):
     return transcription
 
 
-def summarize_text(transcription, custom_prompt, max_tokens=31000):
+def summarize_text(transcription, custom_prompt, max_tokens=7000):
 
     # デバッグ用コード
     if openai.api_key is None:
@@ -114,6 +117,8 @@ def summarize_text(transcription, custom_prompt, max_tokens=31000):
         """
 
     # 1. 与えられたトランスクリプションを、GPT-3.5-turbo モデルが処理できるサイズのチャンクに分割
+    st.write(f"Transcription Length: {len(transcription)}")
+    st.write(f"Max Tokens: {max_tokens}")
     text_chunks = []
     start = 0
     while start < len(transcription):
@@ -123,11 +128,13 @@ def summarize_text(transcription, custom_prompt, max_tokens=31000):
         text_chunks.append(transcription[start:end])   
         start = end
 
+    st.write(f"Number of Chunks: {len(text_chunks)}")
+
     # 2. 分割された各チャンクに対して、MECEに基づく要約を行う
     summarized_chunks = []
     for chunk in text_chunks:
         chunk_prompt = f"""
-        以下のテキストをできるだけ重要な箇所を漏らさないように、短い文章にしてください。
+        以下のテキストをできるだけ重要な箇所を漏らさないように、元の文章から7割程度の分量になるよう短くしてください。
         5W1Hの情報は必ず残してください。
         : {chunk}
         """
@@ -149,7 +156,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=31000):
 
     # 3. 次に各チャンクごとの要約をまとめ、一つの文章に整える
     summarized_text = " ".join(summarized_chunks)
-
+    
     # 4. まとめられた文章をカスタムプロンプトまたは基本プロンプトに則り要約を行う
     final_prompt = f"{custom_prompt}: {summarized_text}"
 
@@ -173,7 +180,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=31000):
 if st.button("Summarize"):
     if uploaded_file_obj is not None and openai_api_key:
         st.write("Transcribing audio...")
-        transcription = transcribe_audio(uploaded_file_obj)
+        transcription = transcribe_audio(uploaded_file_obj, language_options[selected_language])
         st.write("Transcription:")
         st.text_area("", transcription, height=200)
         st.download_button(
