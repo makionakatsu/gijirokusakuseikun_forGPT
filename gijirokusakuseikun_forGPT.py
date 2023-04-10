@@ -9,8 +9,9 @@ from tempfile import NamedTemporaryFile
 
 st.title("議事録作成くん ver0.7")
 
-openai_api_key = st.text_input("Enter OpenAI API Key:")
+openai_api_key = st.text_input("Enter OpenAI API Key:", type="password")  # type 引数を "password" に設定して目隠し
 openai.api_key = openai_api_key
+
 
 language_options = {"Japanese":"ja", "English":"en", "Chinese": "zh"}
 selected_language = st.selectbox("Choose a language:", options=list(language_options.keys()))
@@ -57,8 +58,11 @@ def transcribe_audio(uploaded_file_obj, language):
     else:
         audio_chunks = [audio_segment]
 
+    # 1. プログレスバーを追加
+    progress_bar = st.progress(0)
+
     transcriptions = []
-    for chunk in audio_chunks:
+    for i, chunk in enumerate(audio_chunks):
         with NamedTemporaryFile(suffix=".mp3", delete=False) as temp_file:
             if file_size > TARGET_FILE_SIZE:
                 print(f"Exporting chunk with bitrate={target_kbps}k")
@@ -82,6 +86,9 @@ def transcribe_audio(uploaded_file_obj, language):
 
             os.unlink(temp_file.name)
             transcriptions.append(transcript.text)
+            
+            # 2. プログレスバーを更新
+            progress_bar.progress((i + 1) / len(audio_chunks))
 
     transcription = " ".join(transcriptions)
     return transcription
@@ -130,15 +137,17 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
 
     st.write(f"Number of Chunks: {len(text_chunks)}")
 
+    # プログレスバーを追加
+    progress_bar = st.progress(0)
+
     # 2. 分割された各チャンクに対して、MECEに基づく要約を行う
     summarized_chunks = []
-    for chunk in text_chunks:
+    for i, chunk in enumerate(text_chunks):
         chunk_prompt = f"""
         以下のテキストをできるだけ重要な箇所を漏らさないように、元の文章から7割程度の分量になるよう短くしてください。
         5W1Hの情報は必ず残してください。
         : {chunk}
         """
-
         response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=[
@@ -153,6 +162,9 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
         )
         summarized_chunk = response["choices"][0]["message"]["content"]
         summarized_chunks.append(summarized_chunk)
+        
+        # プログレスバーを更新
+        progress_bar.progress((i + 1) / (len(text_chunks) + 1))
 
     # 3. 次に各チャンクごとの要約をまとめ、一つの文章に整える
     summarized_text = " ".join(summarized_chunks)
@@ -174,6 +186,9 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
     )
     final_summary = response["choices"][0]["message"]["content"]
 
+    # final_summaryの処理が完了した後にプログレスバーを更新
+    progress_bar.progress(1)
+    
     return final_summary
 
 
