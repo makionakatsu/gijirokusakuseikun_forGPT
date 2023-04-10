@@ -201,3 +201,6 @@ if st.button("Summarize"):
         )
     else:
         st.error("Please upload an audio file and enter your OpenAI API key.")
+
+twitter_handle = "makio_study" 
+st.markdown(f"フィードバックはこちらまで: [@{twitter_handle}](https://twitter.com/{twitter_handle})")
