@@ -94,7 +94,7 @@ def transcribe_audio(uploaded_file_obj, language):
     return transcription
 
 
-def summarize_text(transcription, custom_prompt, max_tokens=5000):
+def summarize_text(transcription, custom_prompt, max_tokens=6000):
 
     # デバッグ用コード
     if openai.api_key is None:
@@ -145,7 +145,8 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
     summarized_chunks = []
     for i, chunk in enumerate(text_chunks):
         chunk_prompt = f"""
-        以下のテキストを重要な箇所を漏らさないように、できるだけ短くしてください。
+        以下のテキストを重要な箇所を漏らさないように、ステップバイステップで解釈してください。
+        その後、できる限り短縮した文章に書き換えてください。
         5W1Hの情報は必ず残してください。
         テキスト: {chunk}
         """
@@ -153,8 +154,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
             model="gpt-4",
             messages=[
                 {"role": "system", "content": """
-                 あなたは優秀な文筆家です。
-                 MECEや5W1Hの思考法を用いることが得意です。
+                 あなたは、MECEや5W1Hの思考法を用いることが得意です。
                  仕事の要約に使える文章を出力します。
                  """
                 },
@@ -177,8 +177,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
         model="gpt-4",
         messages=[
             {"role": "system", "content": """
-             あなたは優秀な文筆家です。
-             MECEや5W1Hの思考法を用いることが得意です。
+             あなたは、MECEや5W1Hの思考法を用いることが得意です。
              仕事の要約に使えるわかりやすい文章を出力します。
              """
             },
