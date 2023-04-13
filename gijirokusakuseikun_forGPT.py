@@ -104,13 +104,14 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
 
     if not custom_prompt:
         custom_prompt = f"""
-        以下のテキストについて、注意事項に則って短い文章でMarkdown方式で要約して出力してください。
+        以下のテキストについて、注意事項に則って短い文章で要約して出力してください。
         #️# 注意事項 ##
         ・議題ごとのまとまりで要約する
         ・ダブりや不足のないようにする
         ・重要箇所は重要であることを明示する
         ・5W1Hの内容が含まれる場合は必ず出力に反映する
         ## 出力フォーマット ##
+        ・出力はMarkdown方式とする
         ・要約は、200字以内とする。
         ・箇条書きとする。
         ・フォーマットは以下とする。
@@ -144,9 +145,9 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
     summarized_chunks = []
     for i, chunk in enumerate(text_chunks):
         chunk_prompt = f"""
-        以下のテキストをできるだけ重要な箇所を漏らさないように、元の文章から7割程度の分量になるよう短くしてください。
+        以下のテキストを重要な箇所を漏らさないように、できるだけ短くしてください。
         5W1Hの情報は必ず残してください。
-        : {chunk}
+        テキスト: {chunk}
         """
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -178,7 +179,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=5000):
             {"role": "system", "content": """
              あなたは優秀な文筆家です。
              MECEや5W1Hの思考法を用いることが得意です。
-             仕事の要約に使える文章を出力します。
+             仕事の要約に使えるわかりやすい文章を出力します。
              """
             },
             {"role": "user", "content": final_prompt},
@@ -217,5 +218,13 @@ if st.button("Summarize"):
     else:
         st.error("Please upload an audio file and enter your OpenAI API key.")
 
+
+
 twitter_handle = "makio_study" 
 st.markdown(f"フィードバックはこちらまで: [@{twitter_handle}](https://twitter.com/{twitter_handle})")
+
+
+url = "https://www.amazon.jp/hz/wishlist/ls/MZ8DL267UFX5?ref_=wl_share"
+button_text = "作者を応援する"
+
+st.markdown(f"[{button_text}]({url})", unsafe_allow_html=False)
