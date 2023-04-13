@@ -220,8 +220,7 @@ if st.button("Summarize"):
 
 
 
-twitter_handle = "makio_study" 
-twitter_url = "https://twitter.com/{twitter_handle}"
+twitter_url = "https://twitter.com/makio_study"
 st.markdown(f"[フィードバック]([{twitter_url}])", unsafe_allow_html=False)
 
 
