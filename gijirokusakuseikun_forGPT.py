@@ -221,7 +221,8 @@ if st.button("Summarize"):
 
 
 twitter_url = "https://twitter.com/makio_study"
-st.markdown(f"[フィードバック]([{twitter_url}])", unsafe_allow_html=False)
+tw_text ="フィードバック"
+st.markdown(f"[{tw_text}]({twitter_url})", unsafe_allow_html=False)
 
 
 url = "https://www.amazon.jp/hz/wishlist/ls/MZ8DL267UFX5?ref_=wl_share"
