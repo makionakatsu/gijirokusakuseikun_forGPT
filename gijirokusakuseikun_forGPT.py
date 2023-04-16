@@ -173,7 +173,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
     final_prompt = f"{custom_prompt}: {summarized_text}"
 
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": """
              あなたは、MECEや5W1Hの思考法を用いることが得意です。
