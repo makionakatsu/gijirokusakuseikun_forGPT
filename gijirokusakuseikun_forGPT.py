@@ -219,11 +219,11 @@ if st.button("Summarize"):
 
 
 twitter_url = "https://twitter.com/makio_study"
-tw_text ="フィードバック"
+tw_text ="Send feedback"
 st.markdown(f"[{tw_text}]({twitter_url})", unsafe_allow_html=False)
 
 
 url = "https://www.amazon.jp/hz/wishlist/ls/MZ8DL267UFX5?ref_=wl_share"
-button_text = "作者を応援する"
+button_text = "Supporting indie developers"
 
 st.markdown(f"[{button_text}]({url})", unsafe_allow_html=False)
