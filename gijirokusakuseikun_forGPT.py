@@ -7,7 +7,7 @@ from pydub.utils import make_chunks
 import math
 from tempfile import NamedTemporaryFile
 
-st.title("議事録作成くん ver0.7")
+st.title("MinuteGenerator ver0.8")
 
 openai_api_key = st.text_input("Enter OpenAI API Key:", type="password")  # type 引数を "password" に設定して目隠し
 openai.api_key = openai_api_key
