@@ -145,9 +145,8 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
     summarized_chunks = []
     for i, chunk in enumerate(text_chunks):
         chunk_prompt = f"""
-        以下のテキストを重要な箇所を漏らさないように、ステップバイステップで解釈してください。
-        その後、できる限り短縮した文章に書き換えてください。
-        5W1Hの情報は必ず残してください。
+        以下のテキストを内容を変えないように、できる限りTokenを節約してください。
+        5W1Hの情報が入っている場合は、必ず文中に残してください。
         テキスト: {chunk}
         """
         response = openai.ChatCompletion.create(
