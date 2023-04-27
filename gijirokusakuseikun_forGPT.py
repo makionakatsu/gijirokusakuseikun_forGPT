@@ -115,13 +115,13 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
         ・要約は、200字以内とする。
         ・箇条書きとする。
         ・フォーマットは以下とする。
-        ###議題
-        ###要約
-        ###決定事項(結論)
-        ###主な意見
-        ####ポジティブな意見
-        ####ネガティブな意見
-        ###NextAction
+        ####議題
+        ####要約
+        ####決定事項(結論)
+        ####主な意見
+        #####ポジティブな意見
+        #####ネガティブな意見
+        ####NextAction
         """
 
     # 1. 与えられたトランスクリプションを、GPT-3.5-turbo モデルが処理できるサイズのチャンクに分割
@@ -173,7 +173,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
     final_prompt = f"{custom_prompt}: {summarized_text}"
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=[
             {"role": "system", "content": """
              あなたは、MECEや5W1Hの思考法を用いることが得意です。
