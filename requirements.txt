@@ -2,4 +2,3 @@ openai
 streamlit
 pydub
 numpy
-ffmpeg-python
