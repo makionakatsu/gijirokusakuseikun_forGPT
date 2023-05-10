@@ -153,8 +153,8 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": """
-                 あなたは、MECEや5W1Hの思考法を用いることが得意です。
-                 仕事の要約に使える文章を出力します。
+                 あなたの役割は、できる限りTokenを節約することです。
+                 ただしMECEや5W1Hの思考法を用いて、文章中の大事な箇所は必ず残してください。
                  """
                 },
                 {"role": "user", "content": chunk_prompt},
