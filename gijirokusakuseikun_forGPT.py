@@ -6,6 +6,8 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 import math
 from tempfile import NamedTemporaryFile
+import sys
+sys.path.append('/opt/homebrew/bin/ffmpeg') 
 
 st.title("MinuteGenerator ver0.8")
 
