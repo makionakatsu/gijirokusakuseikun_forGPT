@@ -1,5 +1,5 @@
 openai
-streamlit
+streamlit ==23.1.2
 pydub
 numpy
 ffmpeg-python
