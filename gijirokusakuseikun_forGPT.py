@@ -223,7 +223,4 @@ tw_text ="Send feedback"
 st.markdown(f"[{tw_text}]({twitter_url})", unsafe_allow_html=False)
 
 
-url = "https://www.amazon.jp/hz/wishlist/ls/MZ8DL267UFX5?ref_=wl_share"
-button_text = "Supporting indie developers"
-
-st.markdown(f"[{button_text}]({url})", unsafe_allow_html=False)
+st.markdown("[![Buy me a coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/makionakatsu)")
