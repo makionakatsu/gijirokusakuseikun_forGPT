@@ -224,3 +224,10 @@ st.markdown(f"[{tw_text}]({twitter_url})", unsafe_allow_html=False)
 
 
 st.markdown("[![Buy me a coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/makionakatsu)")
+
+# 画像の大きさを指定するHTMLコード
+html_code = '<a href="https://www.buymeacoffee.com/makionakatsu" target="_blank">' \
+            '<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" ' \
+            'alt="Buy Me A Coffee" height="60" width="250"></a>'
+
+st.markdown(html_code, unsafe_allow_html=True)
