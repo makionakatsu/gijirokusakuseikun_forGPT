@@ -222,9 +222,6 @@ twitter_url = "https://twitter.com/makio_study"
 tw_text ="Send feedback"
 st.markdown(f"[{tw_text}]({twitter_url})", unsafe_allow_html=False)
 
-
-st.markdown("[![Buy me a coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/makionakatsu)")
-
 # 画像の大きさを指定するHTMLコード
 html_code = '<a href="https://www.buymeacoffee.com/makionakatsu" target="_blank">' \
             '<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" ' \
