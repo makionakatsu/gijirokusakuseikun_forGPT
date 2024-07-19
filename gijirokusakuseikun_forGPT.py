@@ -82,7 +82,7 @@ def transcribe_audio(uploaded_file_obj, language):
                 file_obj.flush()
 
                 with open(temp_file.name, "rb") as file_obj:
-                    transcript = openai.Audio.transcribe(model="whisper-1", language = language, file=file_obj)
+                    transcript = OpenAI.Audio.transcribe(model="whisper-1", language = language, file=file_obj)
 
             os.unlink(temp_file.name)
             transcriptions.append(transcript.text)
@@ -173,8 +173,9 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
     # 4. まとめられた文章をカスタムプロンプトまたは基本プロンプトに則り要約を行う
     final_prompt = f"{custom_prompt}: {summarized_text}"
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k",
+    client = OpenAI
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": """
              あなたは、MECEや5W1Hの思考法を用いることが得意です。
@@ -184,7 +185,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
             {"role": "user", "content": final_prompt},
         ],
     )
-    final_summary = response["choices"][0]["message"]["content"]
+    final_summary = completion.choices[0].message
 
     # final_summaryの処理が完了した後にプログレスバーを更新
     progress_bar.progress(1)
