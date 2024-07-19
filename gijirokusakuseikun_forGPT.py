@@ -1,5 +1,5 @@
 import os
-import openai
+from openai import OpenAI
 import streamlit as st
 import io
 from pydub import AudioSegment
@@ -10,7 +10,7 @@ from tempfile import NamedTemporaryFile
 st.title("MinuteGenerator ver0.8")
 
 openai_api_key = st.text_input("Enter OpenAI API Key:", type="password")  # type 引数を "password" に設定して目隠し
-openai.api_key = openai_api_key
+OpenAI.api_key = openai_api_key
 
 
 language_options = {"Japanese":"ja", "English":"en", "Chinese": "zh"}
@@ -97,7 +97,7 @@ def transcribe_audio(uploaded_file_obj, language):
 def summarize_text(transcription, custom_prompt, max_tokens=3000):
 
     # デバッグ用コード
-    if openai.api_key is None:
+    if OpenAI.api_key is None:
         st.error("API key is not set in the summarize_text function.")
     else:
         st.write("API key is set in the summarize_text function.")
@@ -149,8 +149,9 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
         5W1Hの情報が入っている場合は、必ず文中に残してください。
         テキスト: {chunk}
         """
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-16k",
+        client = OpenAI()
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": """
                  あなたの役割は、できる限りTokenを節約することです。
@@ -160,7 +161,7 @@ def summarize_text(transcription, custom_prompt, max_tokens=3000):
                 {"role": "user", "content": chunk_prompt},
             ],
         )
-        summarized_chunk = response["choices"][0]["message"]["content"]
+        summarized_chunk = completion.choices[0].message
         summarized_chunks.append(summarized_chunk)
         
         # プログレスバーを更新
